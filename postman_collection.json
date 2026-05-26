@@ -1,0 +1,247 @@
+{
+  "info": {
+    "name": "BFHL API Collection",
+    "_postman_id": "bfhl-api-collection",
+    "description": "Bajaj Finserv Health Challenge API - All test cases",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "description": "Base URL for the API. Change to Render URL after deployment."
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('Service is UP', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.status).to.eql('UP');",
+              "    pm.expect(jsonData.user_id).to.eql('piyush_ghoshi_03012005');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test 1 - Example A",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"data\": [\"a\", \"1\", \"334\", \"4\", \"R\", \"$\"]}"
+        },
+        "url": {
+          "raw": "{{base_url}}/bfhl",
+          "host": ["{{base_url}}"],
+          "path": ["bfhl"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('is_success is true', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.is_success).to.eql(true);",
+              "    pm.expect(jsonData.odd_numbers).to.eql(['1']);",
+              "    pm.expect(jsonData.even_numbers).to.eql(['334', '4']);",
+              "    pm.expect(jsonData.alphabets).to.eql(['A', 'R']);",
+              "    pm.expect(jsonData.special_characters).to.eql(['$']);",
+              "    pm.expect(jsonData.sum).to.eql('339');",
+              "    pm.expect(jsonData.concat_string).to.eql('Ra');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test 2 - Example B",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"data\": [\"2\", \"a\", \"y\", \"4\", \"&\", \"-\", \"*\", \"5\", \"92\", \"b\"]}"
+        },
+        "url": {
+          "raw": "{{base_url}}/bfhl",
+          "host": ["{{base_url}}"],
+          "path": ["bfhl"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('is_success is true', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.is_success).to.eql(true);",
+              "    pm.expect(jsonData.odd_numbers).to.eql(['5']);",
+              "    pm.expect(jsonData.even_numbers).to.eql(['2', '4', '92']);",
+              "    pm.expect(jsonData.alphabets).to.eql(['A', 'Y', 'B']);",
+              "    pm.expect(jsonData.special_characters).to.eql(['&', '-', '*']);",
+              "    pm.expect(jsonData.sum).to.eql('103');",
+              "    pm.expect(jsonData.concat_string).to.eql('ByA');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test 3 - Example C (Multi-char Alphabets)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"data\": [\"A\", \"ABCD\", \"DOE\"]}"
+        },
+        "url": {
+          "raw": "{{base_url}}/bfhl",
+          "host": ["{{base_url}}"],
+          "path": ["bfhl"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('is_success is true', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.is_success).to.eql(true);",
+              "    pm.expect(jsonData.odd_numbers).to.eql([]);",
+              "    pm.expect(jsonData.even_numbers).to.eql([]);",
+              "    pm.expect(jsonData.alphabets).to.eql(['A', 'ABCD', 'DOE']);",
+              "    pm.expect(jsonData.special_characters).to.eql([]);",
+              "    pm.expect(jsonData.sum).to.eql('0');",
+              "    pm.expect(jsonData.concat_string).to.eql('EoDdCbAa');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test 4 - Empty Data Array",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"data\": []}"
+        },
+        "url": {
+          "raw": "{{base_url}}/bfhl",
+          "host": ["{{base_url}}"],
+          "path": ["bfhl"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('is_success is true with empty results', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.is_success).to.eql(true);",
+              "    pm.expect(jsonData.odd_numbers).to.eql([]);",
+              "    pm.expect(jsonData.even_numbers).to.eql([]);",
+              "    pm.expect(jsonData.alphabets).to.eql([]);",
+              "    pm.expect(jsonData.special_characters).to.eql([]);",
+              "    pm.expect(jsonData.sum).to.eql('0');",
+              "    pm.expect(jsonData.concat_string).to.eql('');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Test 5 - Null Data",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        },
+        "url": {
+          "raw": "{{base_url}}/bfhl",
+          "host": ["{{base_url}}"],
+          "path": ["bfhl"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test('is_success is false', function () {",
+              "    var jsonData = pm.response.json();",
+              "    pm.expect(jsonData.is_success).to.eql(false);",
+              "    pm.expect(jsonData.message).to.exist;",
+              "});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
